@@ -1,0 +1,64 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+build()
+{
+    distro=$1
+    branch=${2:-}
+    variant=${3:-}
+    base=${distro}${branch:+-${branch}}
+
+    if [ -n "${variant}" ]; then
+        docker build --build-arg yocto_builder_base=${DOCKER_REPO}:${base} \
+            ${DOCKER_BUILD_OPTS:-} \
+            -t ${DOCKER_REPO}:${base}-${variant} \
+            -f ${variant}/Dockerfile .
+    elif [ -e "Dockerfile.${distro}" ]; then
+        docker build --build-arg yocto_branch=${branch} \
+            ${DOCKER_BUILD_OPTS:-} \
+            -t ${DOCKER_REPO}:${base} \
+            -f Dockerfile.${distro} .
+    else
+        docker build --build-arg yocto_branch=${branch} \
+            --build-arg ubuntu_version=${distro} \
+            ${DOCKER_BUILD_OPTS:-} \
+            -t ${DOCKER_REPO}:${base} \
+            .
+    fi
+}
+
+if [ $# -eq 0 ]; then
+    for b in "" zeus warrior thud sumo rocko pyro morty krogoth jethro fido dizzy daisy; do
+        build bionic "${b}"
+        build bionic "${b}" intel
+        build xenial "${b}"
+        build xenial "${b}" intel
+        build trusty "${b}"
+        build trusty "${b}" intel
+        build centos7 "${b}"
+        build centos7 "${b}" intel
+    done
+
+    docker tag ${DOCKER_REPO}:bionic ${DOCKER_REPO}
+    docker tag ${DOCKER_REPO}:bionic-intel ${DOCKER_REPO}:intel
+
+    for b in zeus warrior thud; do
+        docker tag ${DOCKER_REPO}:bionic-${b} ${DOCKER_REPO}:${b}
+        docker tag ${DOCKER_REPO}:bionic-${b}-intel ${DOCKER_REPO}:${b}-intel
+    done
+
+    for b in sumo rocko pyro morty krogoth; do
+        docker tag ${DOCKER_REPO}:xenial-${b} ${DOCKER_REPO}:${b}
+        docker tag ${DOCKER_REPO}:xenial-${b}-intel ${DOCKER_REPO}:${b}-intel
+    done
+
+    for b in jethro fido dizzy daisy; do
+        docker tag ${DOCKER_REPO}:trusty-${b} ${DOCKER_REPO}:${b}
+        docker tag ${DOCKER_REPO}:trusty-${b}-intel ${DOCKER_REPO}:${b}-intel
+    done
+else
+    build "$@"
+fi

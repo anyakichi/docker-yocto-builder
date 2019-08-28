@@ -1,0 +1,83 @@
+FROM ubuntu:14.04
+
+RUN \
+  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    build-essential \
+    chrpath \
+    diffstat \
+    gawk \
+    gcc-multilib \
+    git-core \
+    language-pack-en \
+    python \
+    socat \
+    sudo \
+    syslinux \
+    texinfo \
+    tmux \
+    unzip \
+    wget \
+    && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN \
+  update-locale LANG=en_US.UTF-8
+
+RUN \
+  GOSU_VERSION=1.10 && \
+  GOSU_ARCH=amd64 && \
+  wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${GOSU_ARCH}" && \
+  wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${GOSU_ARCH}.asc" && \
+  export GNUPGHOME="$(mktemp -d)" && \
+  for server in $(shuf -e ha.pool.sks-keyservers.net \
+                          hkp://p80.pool.sks-keyservers.net:80 \
+                          keyserver.ubuntu.com \
+                          hkp://keyserver.ubuntu.com:80 \
+                          pgp.mit.edu) ; do \
+        gpg --batch --keyserver "$server" --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && break || : ; \
+    done && \
+  gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu && \
+  rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc && \
+  chmod +x /usr/local/bin/gosu && \
+  gosu nobody true
+
+ADD \
+  http://git.yoctoproject.org/cgit/cgit.cgi/poky/plain/scripts/oe-git-proxy \
+  /usr/local/bin/
+RUN chmod 755 /usr/local/bin/oe-git-proxy
+
+RUN \
+  useradd -ms /bin/bash builder && \
+  echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+USER builder
+RUN \
+  echo 'ulimit -n 1024' >> ~/.bashrc && \
+  echo '. <(buildenv init)' >> ~/.bashrc && \
+  echo '[[ ${NO_PROXY} ]] || export NO_PROXY=$no_proxy' >> ~/.bashrc && \
+  echo '[[ ${http_proxy} ]] && export GIT_PROXY_COMMAND=oe-git-proxy' >> ~/.bashrc && \
+  git config --global user.email "builder@yocto" && \
+  git config --global user.name "Yocto Builder"
+
+USER root
+WORKDIR /home/builder
+
+COPY buildenv/entrypoint.sh /usr/local/sbin/entrypoint
+COPY buildenv/buildenv.sh /usr/local/bin/buildenv
+
+COPY buildenv/buildenv.conf /etc/
+COPY buildenv.d/ /etc/buildenv.d/
+
+RUN sed -i 's/^#DOTCMDS=.*/DOTCMDS=setup/' /etc/buildenv.conf
+
+ENTRYPOINT ["/usr/local/sbin/entrypoint"]
+CMD ["/bin/bash"]
+
+ARG YOCTO_BRANCH
+ENV \
+  LANG=en_US.UTF-8 \
+  YOCTO_BITBAKE_TARGET=core-image-minimal \
+  YOCTO_BRANCH=${YOCTO_BRANCH:-master} \
+  YOCTO_DL_DIR="" \
+  YOCTO_MACHINE="" \
+  YOCTO_SSTATE_DIR=""
