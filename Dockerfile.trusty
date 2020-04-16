@@ -25,7 +25,7 @@ RUN \
   update-locale LANG=en_US.UTF-8
 
 RUN \
-  GOSU_VERSION=1.10 && \
+  GOSU_VERSION=1.11 && \
   GOSU_ARCH=amd64 && \
   wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${GOSU_ARCH}" && \
   wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${GOSU_ARCH}.asc" && \
