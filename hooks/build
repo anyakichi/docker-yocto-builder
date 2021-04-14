@@ -31,7 +31,7 @@ build()
 }
 
 if [ $# -eq 0 ]; then
-    for b in "" zeus warrior thud sumo rocko pyro morty krogoth jethro fido dizzy daisy; do
+    for b in "" gatesgarth dunfell zeus warrior thud sumo rocko pyro morty krogoth jethro fido dizzy daisy; do
         build bionic "${b}"
         build bionic "${b}" intel
         build xenial "${b}"
@@ -45,7 +45,7 @@ if [ $# -eq 0 ]; then
     docker tag ${DOCKER_REPO}:bionic ${DOCKER_REPO}
     docker tag ${DOCKER_REPO}:bionic-intel ${DOCKER_REPO}:intel
 
-    for b in zeus warrior thud; do
+    for b in gatesgarth dunfell zeus warrior thud; do
         docker tag ${DOCKER_REPO}:bionic-${b} ${DOCKER_REPO}:${b}
         docker tag ${DOCKER_REPO}:bionic-${b}-intel ${DOCKER_REPO}:${b}-intel
     done
