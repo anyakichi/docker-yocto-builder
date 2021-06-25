@@ -25,23 +25,29 @@ build()
 }
 
 if [ $# -eq 0 ]; then
-    for b in "" gatesgarth dunfell zeus warrior thud sumo rocko pyro morty krogoth jethro fido dizzy daisy; do
-        build bionic "${b}"
-        build xenial "${b}"
+    for b in daisy dizzy fido jethro krogoth morty pyro rocko sumo thud \
+            warrior zeus dunfell gatesgarth hardknott honister kirkstone ""; do
         build trusty "${b}"
+        build xenial "${b}"
+        build bionic "${b}"
+        build focal "${b}"
     done
 
-    docker tag ${DOCKER_REPO}:bionic ${DOCKER_REPO}
+    docker tag ${DOCKER_REPO}:focal ${DOCKER_REPO}
 
-    for b in gatesgarth dunfell zeus warrior thud; do
+    for b in gatesgarth hardknott honister kirkstone; do
         docker tag ${DOCKER_REPO}:bionic-${b} ${DOCKER_REPO}:${b}
     done
 
-    for b in sumo rocko pyro morty krogoth; do
+    for b in thud warrior zeus dunfell; do
+        docker tag ${DOCKER_REPO}:bionic-${b} ${DOCKER_REPO}:${b}
+    done
+
+    for b in krogoth morty pyro rocko sumo; do
         docker tag ${DOCKER_REPO}:xenial-${b} ${DOCKER_REPO}:${b}
     done
 
-    for b in jethro fido dizzy daisy; do
+    for b in daisy dizzy fido jethro; do
         docker tag ${DOCKER_REPO}:trusty-${b} ${DOCKER_REPO}:${b}
     done
 else

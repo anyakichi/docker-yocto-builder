@@ -1,9 +1,11 @@
 #!/bin/bash
 
-for b in daisy dizzy fido jethro krogoth morty pyro rocko sumo thud warrior zeus dunfell gatesgarth; do
+for b in daisy dizzy fido jethro krogoth morty pyro rocko sumo thud warrior \
+        zeus dunfell gatesgarth hardknott honister kirkstone; do
     docker push ${DOCKER_REPO}:trusty-${b}
     docker push ${DOCKER_REPO}:xenial-${b}
     docker push ${DOCKER_REPO}:bionic-${b}
+    docker push ${DOCKER_REPO}:focal-${b}
     docker push ${DOCKER_REPO}:${b}
 done
 
