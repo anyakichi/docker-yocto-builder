@@ -29,7 +29,6 @@ if [ $# -eq 0 ]; then
         build bionic "${b}"
         build xenial "${b}"
         build trusty "${b}"
-        build centos7 "${b}"
     done
 
     docker tag ${DOCKER_REPO}:bionic ${DOCKER_REPO}

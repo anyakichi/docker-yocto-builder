@@ -1,7 +1,6 @@
 #!/bin/bash
 
 for b in daisy dizzy fido jethro krogoth morty pyro rocko sumo thud warrior zeus dunfell gatesgarth; do
-    docker push ${DOCKER_REPO}:centos7-${b}
     docker push ${DOCKER_REPO}:trusty-${b}
     docker push ${DOCKER_REPO}:xenial-${b}
     docker push ${DOCKER_REPO}:bionic-${b}
