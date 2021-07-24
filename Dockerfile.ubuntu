@@ -1,46 +1,47 @@
-FROM ubuntu:14.04
+ARG ubuntu_version="latest"
+FROM ubuntu:${ubuntu_version}
 
+# https://www.yoctoproject.org/docs/2.7/ref-manual/ref-manual.html
+# https://docs.yoctoproject.org/ref-manual/system-requirements.html#ubuntu-and-debian
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential \
     chrpath \
+    cpio \
+    debianutils \
     diffstat \
     gawk \
+    gcc \
     gcc-multilib \
-    git-core \
-    language-pack-en \
+    git \
+    iputils-ping \
+    libegl1-mesa \
+    libsdl1.2-dev \
+    mesa-common-dev \
+    pylint3 \
     python \
+    python3 \
+    python3-git \
+    python3-jinja2 \
+    python3-pexpect \
+    python3-pip \
+    python3-subunit \
     socat \
-    sudo \
-    syslinux \
     texinfo \
-    tmux \
     unzip \
     wget \
+    xterm \
+    xz-utils \
+    gosu \
+    language-pack-en \
+    sudo \
+    tmux \
     && \
   rm -rf /var/lib/apt/lists/*
 
 RUN \
   update-locale LANG=en_US.UTF-8
-
-RUN \
-  GOSU_VERSION=1.11 && \
-  GOSU_ARCH=amd64 && \
-  wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${GOSU_ARCH}" && \
-  wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${GOSU_ARCH}.asc" && \
-  export GNUPGHOME="$(mktemp -d)" && \
-  for server in $(shuf -e ha.pool.sks-keyservers.net \
-                          hkp://p80.pool.sks-keyservers.net:80 \
-                          keyserver.ubuntu.com \
-                          hkp://keyserver.ubuntu.com:80 \
-                          pgp.mit.edu) ; do \
-        gpg --batch --keyserver "$server" --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && break || : ; \
-    done && \
-  gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu && \
-  rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc && \
-  chmod +x /usr/local/bin/gosu && \
-  gosu nobody true
 
 ADD \
   http://git.yoctoproject.org/cgit/cgit.cgi/poky/plain/scripts/oe-git-proxy \
