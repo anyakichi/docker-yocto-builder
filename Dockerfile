@@ -2,6 +2,7 @@ ARG ubuntu_version="latest"
 FROM ubuntu:${ubuntu_version}
 
 # https://www.yoctoproject.org/docs/2.7/ref-manual/ref-manual.html
+# https://docs.yoctoproject.org/ref-manual/system-requirements.html#ubuntu-and-debian
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -11,17 +12,21 @@ RUN \
     debianutils \
     diffstat \
     gawk \
+    gcc \
     gcc-multilib \
-    git-core \
+    git \
     iputils-ping \
     libegl1-mesa \
     libsdl1.2-dev \
+    mesa-common-dev \
+    pylint3 \
     python \
     python3 \
     python3-git \
     python3-jinja2 \
     python3-pexpect \
     python3-pip \
+    python3-subunit \
     socat \
     texinfo \
     unzip \
