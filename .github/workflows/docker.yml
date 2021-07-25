@@ -93,6 +93,7 @@ jobs:
       - uses: docker/build-push-action@v2
         with:
           context: .
+          file: Dockerfile.env
           push: ${{ github.ref == 'refs/heads/main' }}
           build-args: |
             base=${{ matrix.base }}-master
