@@ -74,10 +74,11 @@ RUN sed -i 's/^#DOTCMDS=.*/DOTCMDS=setup/' /etc/buildenv.conf
 ENTRYPOINT ["/usr/local/sbin/entrypoint"]
 CMD ["/bin/bash"]
 
+ARG yocto_branch
 ENV \
   LANG=en_US.UTF-8 \
   YOCTO_BITBAKE_TARGET=core-image-minimal \
-  YOCTO_BRANCH=master \
+  YOCTO_BRANCH=${yocto_branch} \
   YOCTO_DL_DIR="" \
   YOCTO_MACHINE="" \
   YOCTO_SSTATE_DIR=""
