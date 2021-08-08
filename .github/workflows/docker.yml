@@ -8,6 +8,8 @@ jobs:
         version: [xenial, bionic, focal]
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - uses: docker/metadata-action@v3
         id: meta
         with:
@@ -71,6 +73,8 @@ jobs:
           fi
           echo EOF >> $GITHUB_ENV
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - uses: docker/metadata-action@v3
         id: meta
         with:
