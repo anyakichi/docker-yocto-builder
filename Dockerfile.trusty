@@ -57,7 +57,8 @@ RUN \
   echo '[[ ${NO_PROXY} ]] || export NO_PROXY=$no_proxy' >> ~/.bashrc && \
   echo '[[ ${http_proxy} ]] && export GIT_PROXY_COMMAND=oe-git-proxy' >> ~/.bashrc && \
   git config --global user.email "builder@yocto" && \
-  git config --global user.name "Yocto Builder"
+  git config --global user.name "Yocto Builder" && \
+  git config --global url."https://github.com/".insteadOf git://github.com/
 
 USER root
 WORKDIR /home/builder
