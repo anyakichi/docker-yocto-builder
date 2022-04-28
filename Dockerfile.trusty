@@ -52,7 +52,6 @@ RUN \
   echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER builder
 RUN \
-  echo 'ulimit -n 1024' >> ~/.bashrc && \
   echo '. <(buildenv init)' >> ~/.bashrc && \
   echo '[[ ${NO_PROXY} ]] || export NO_PROXY=$no_proxy' >> ~/.bashrc && \
   echo '[[ ${http_proxy} ]] && export GIT_PROXY_COMMAND=oe-git-proxy' >> ~/.bashrc && \
