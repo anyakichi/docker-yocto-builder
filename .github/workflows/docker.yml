@@ -3,6 +3,7 @@ on:
   push:
   schedule:
     - cron: '40 15 1 * *'
+  workflow_dispatch:
 jobs:
   build_and_push_base:
     runs-on: ubuntu-latest
