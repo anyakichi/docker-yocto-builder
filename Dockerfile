@@ -79,6 +79,7 @@ ENV \
   LANG=en_US.UTF-8 \
   YOCTO_BITBAKE_TARGET=core-image-minimal \
   YOCTO_BRANCH=${yocto_branch} \
+  YOCTO_CCACHE_DIR="" \
   YOCTO_DL_DIR="" \
   YOCTO_MACHINE="" \
   YOCTO_SSTATE_DIR=""
