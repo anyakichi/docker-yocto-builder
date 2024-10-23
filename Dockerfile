@@ -39,7 +39,15 @@ RUN \
         language-pack-en \
         sudo \
         tmux \
-    && rm -rf /var/lib/apt/lists/*
+    && for i in libegl1-mesa pylint pylint3; do \
+        if apt-cache show "$i" >/dev/null 2>&1; then \
+            DEBIAN_FRONTEND=noninteractive apt-get install -y $i; \
+        fi \
+       done \
+    ; if ! command -v pylint3 >/dev/null 2>&1; then \
+        ln -s /usr/bin/pylint /usr/bin/pylint3; \
+      fi \
+    ; rm -rf /var/lib/apt/lists/*
 
 RUN update-locale LANG=en_US.UTF-8
 
