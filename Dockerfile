@@ -23,7 +23,6 @@ RUN \
     libsdl1.2-dev \
     locales \
     mesa-common-dev \
-    pylint3 \
     python3 \
     python3-git \
     python3-jinja2 \
