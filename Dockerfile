@@ -18,7 +18,6 @@ RUN \
     git \
     iputils-ping \
     libacl1 \
-    libegl1-mesa \
     liblz4-tool \
     libsdl1.2-dev \
     locales \
