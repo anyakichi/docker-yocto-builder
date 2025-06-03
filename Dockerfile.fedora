@@ -1,55 +1,67 @@
-ARG base="ubuntu"
+ARG base="fedora"
 FROM ${base}
 
-# https://www.yoctoproject.org/docs/2.7/ref-manual/ref-manual.html
-# https://docs.yoctoproject.org/ref-manual/system-requirements.html#ubuntu-and-debian
+# https://docs.yoctoproject.org/ref-manual/system-requirements.html#fedora-packages
 RUN \
-    apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        build-essential \
+    . /etc/os-release \
+    ; if [[ "$ID" == "fedora" ]]; then \
+        dnf install -y \
+            perl-File-Compare \
+            perl-File-Copy \
+            perl-FindBin \
+            perl-locale \
+            python; \
+      else \
+        dnf install -y epel-release; \
+        if [[ "${VERSION_ID%%.*}" == 8 ]]; then \
+            dnf config-manager --set-enabled powertools; \
+        else \
+            dnf config-manager --set-enabled crb; \
+        fi; \
+        dnf makecache; \
+      fi \
+    ; dnf install -y \
+        bzip2 \
+        ccache \
         chrpath \
         cpio \
-        debianutils \
+        cpp \
         diffstat \
+        diffutils \
         file \
+        findutils \
         gawk \
         gcc \
-        gcc-multilib \
+        gcc-c++ \
         git \
-        iputils-ping \
-        libacl1 \
-        liblz4-tool \
-        libsdl1.2-dev \
-        locales \
-        mesa-common-dev \
+        glibc-devel \
+        glibc-langpack-en \
+        gzip \
+        hostname \
+        libacl \
+        lz4 \
+        make \
+        patch \
+        perl \
+        perl-Data-Dumper \
+        perl-Text-ParseWords \
+        perl-Thread-Queue \
+        perl-bignum \
         python3 \
-        python3-git \
+        python3-GitPython \
         python3-jinja2 \
         python3-pexpect \
         python3-pip \
-        python3-subunit \
+        rpcgen \
         socat \
+        tar \
         texinfo \
         unzip \
         wget \
-        xterm \
-        xz-utils \
+        which \
+        xz \
         zstd \
-        gosu \
-        language-pack-en \
-        sudo \
-        tmux \
-    && for i in libegl1-mesa pylint pylint3; do \
-        if apt-cache show "$i" >/dev/null 2>&1; then \
-            DEBIAN_FRONTEND=noninteractive apt-get install -y $i; \
-        fi \
-       done \
-    ; if ! command -v pylint3 >/dev/null 2>&1; then \
-        ln -s /usr/bin/pylint /usr/bin/pylint3; \
-      fi \
-    ; rm -rf /var/lib/apt/lists/*
-
-RUN update-locale LANG=en_US.UTF-8
+    && dnf clean all
 
 ADD http://git.yoctoproject.org/cgit/cgit.cgi/poky/plain/scripts/oe-git-proxy /usr/local/bin/
 RUN chmod 755 /usr/local/bin/oe-git-proxy
