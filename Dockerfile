@@ -51,7 +51,7 @@ RUN \
 
 RUN update-locale LANG=en_US.UTF-8
 
-ADD http://git.yoctoproject.org/cgit/cgit.cgi/poky/plain/scripts/oe-git-proxy /usr/local/bin/
+ADD https://git.openembedded.org/openembedded-core/plain/scripts/oe-git-proxy /usr/local/bin/
 RUN chmod 755 /usr/local/bin/oe-git-proxy
 
 RUN \
