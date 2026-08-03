@@ -52,6 +52,7 @@ RUN \
         python3-pip \
         rpcgen \
         socat \
+        sudo \
         tar \
         texinfo \
         unzip \
