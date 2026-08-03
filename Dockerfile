@@ -1,7 +1,6 @@
 ARG base="ubuntu"
 FROM ${base}
 
-# https://www.yoctoproject.org/docs/2.7/ref-manual/ref-manual.html
 # https://docs.yoctoproject.org/ref-manual/system-requirements.html#ubuntu-and-debian
 RUN \
     apt-get update \
@@ -14,14 +13,10 @@ RUN \
         file \
         gawk \
         gcc \
-        gcc-multilib \
         git \
         iputils-ping \
         libacl1 \
-        liblz4-tool \
-        libsdl1.2-dev \
         locales \
-        mesa-common-dev \
         python3 \
         python3-git \
         python3-jinja2 \
@@ -32,14 +27,24 @@ RUN \
         texinfo \
         unzip \
         wget \
-        xterm \
         xz-utils \
         zstd \
         gosu \
         language-pack-en \
         sudo \
         tmux \
-    && for i in libegl1-mesa pylint pylint3; do \
+    && for i in \
+        gcc-multilib \
+        libcrypt-dev \
+        libegl1-mesa \
+        liblz4-tool \
+        libsdl1.2-dev \
+        mesa-common-dev \
+        pylint \
+        pylint3 \
+        python3-websockets \
+        xterm \
+       ; do \
         if apt-cache show "$i" >/dev/null 2>&1; then \
             DEBIAN_FRONTEND=noninteractive apt-get install -y $i; \
         fi \

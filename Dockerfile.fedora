@@ -61,6 +61,11 @@ RUN \
         which \
         xz \
         zstd \
+    && for i in python3-websockets util-linux-script; do \
+        if dnf info "$i" >/dev/null 2>&1; then \
+            dnf install -y "$i"; \
+        fi \
+       done \
     && dnf clean all
 
 ADD https://git.openembedded.org/openembedded-core/plain/scripts/oe-git-proxy /usr/local/bin/
