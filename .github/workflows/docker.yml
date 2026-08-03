@@ -9,7 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        base: [ubuntu:xenial, ubuntu:bionic, ubuntu:focal, ubuntu:jammy, ubuntu:noble]
+        base:
+          - ubuntu:xenial
+          - ubuntu:bionic
+          - ubuntu:focal
+          - ubuntu:jammy
+          - ubuntu:noble
+          - ubuntu:resolute
     steps:
       - id: tags
         run: |
@@ -95,10 +101,19 @@ jobs:
         bionic-thud bionic-warrior bionic-zeus bionic-dunfell
         focal-gatesgarth focal-hardknott focal-honister focal-kirkstone
         jammy-langdale jammy-nanbield jammy-scarthgap jammy-styhead
-        noble-styhead noble-walnascar
+        noble-styhead noble-walnascar noble-whinlatter noble-wrynose
     strategy:
       matrix:
-        base: [xenial, bionic, focal, jammy, noble, fedora, almalinux8, almalinux9]
+        base:
+          - xenial
+          - bionic
+          - focal
+          - jammy
+          - noble
+          - resolute
+          - fedora
+          - almalinux8
+          - almalinux9
         branch:
           - krogoth
           - morty
@@ -119,6 +134,8 @@ jobs:
           - scarthgap
           - styhead
           - walnascar
+          - whinlatter
+          - wrynose
     steps:
       - run: |
           tag="${{ matrix.base }}-${{ matrix.branch }}"
