@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# Print how the release is set up:
+#
+#   poky           poky is cloned, and oe-init-build-env is sourced.
+#   bitbake-setup  bitbake-setup collects the layers and prepares the
+#                  build directory.  This is how the releases since
+#                  whinlatter (5.3) are set up.
+#
+# The releases that predate bitbake-setup are listed here, since that
+# list never grows.  YOCTO_LEGACY_BRANCHES overrides it.
+
+legacy_branches="\
+krogoth morty pyro rocko sumo thud warrior zeus dunfell gatesgarth \
+hardknott honister kirkstone langdale mickledore nanbield scarthgap \
+styhead walnascar"
+
+case " ${YOCTO_LEGACY_BRANCHES-${legacy_branches}} " in
+    *" ${YOCTO_BRANCH:-master} "*)
+        echo poky
+        ;;
+    *)
+        echo bitbake-setup
+        ;;
+esac

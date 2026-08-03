@@ -90,7 +90,16 @@ COPY buildenv/buildenv.sh /usr/local/bin/buildenv
 COPY buildenv/buildenv.conf /etc/
 COPY buildenv.d/ /etc/buildenv.d/
 
-RUN sed -i 's/^#DOTCMDS=.*/DOTCMDS=setup/' /etc/buildenv.conf
+# The documents of extract and setup are chosen by this command.
+COPY bin/yocto-flavor /usr/local/bin/
+
+# The documents that extract and setup include are commands of buildenv
+# as well, but they are not meant to be run by hand.
+RUN \
+    sed -i \
+        -e 's/^#ALIASES=.*/ALIASES="extract setup build"/' \
+        -e 's/^#DOTCMDS=.*/DOTCMDS=setup/' \
+      /etc/buildenv.conf
 
 ENTRYPOINT ["/buildenv-entrypoint.sh"]
 CMD ["/bin/bash"]
@@ -100,7 +109,12 @@ ENV \
     LANG=en_US.UTF-8 \
     YOCTO_BITBAKE_TARGET=core-image-minimal \
     YOCTO_BRANCH=${yocto_branch} \
+    YOCTO_BUILDTOOLS="" \
+    YOCTO_BUILDTOOLS_OPTS="" \
     YOCTO_CCACHE_DIR="" \
+    YOCTO_CONFIG="" \
+    YOCTO_CONFIG_NAME="" \
+    YOCTO_DISTRO="" \
     YOCTO_DL_DIR="" \
     YOCTO_MACHINE="" \
     YOCTO_SSTATE_DIR=""
