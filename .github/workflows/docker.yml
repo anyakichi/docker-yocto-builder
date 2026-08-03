@@ -8,6 +8,8 @@ jobs:
   build_and_push_base:
     runs-on: ubuntu-latest
     strategy:
+      # A registry that times out on one base must not cancel the others.
+      fail-fast: false
       matrix:
         base:
           - ubuntu:xenial
@@ -54,6 +56,7 @@ jobs:
   build_and_push_fedora:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         base: [fedora, almalinux:8, almalinux:9]
     steps:
@@ -94,7 +97,7 @@ jobs:
 
   build_and_push:
     runs-on: ubuntu-latest
-    needs: [build_and_push_base]
+    needs: [build_and_push_base, build_and_push_fedora]
     env:
       DEFAULT_PAIRS:
         xenial-krogoth xenial-morty xenial-pyro xenial-rocko xenial-sumo
@@ -103,6 +106,7 @@ jobs:
         jammy-langdale jammy-nanbield jammy-scarthgap jammy-styhead
         noble-styhead noble-walnascar noble-whinlatter noble-wrynose
     strategy:
+      fail-fast: false
       matrix:
         base:
           - xenial
