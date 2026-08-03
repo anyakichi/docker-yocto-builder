@@ -54,8 +54,11 @@ RUN update-locale LANG=en_US.UTF-8
 ADD https://git.openembedded.org/openembedded-core/plain/scripts/oe-git-proxy /usr/local/bin/
 RUN chmod 755 /usr/local/bin/oe-git-proxy
 
+# Recent ubuntu images ship a default user that occupies uid 1000, which
+# the entrypoint would otherwise fail to give to builder.
 RUN \
-    useradd -ms /bin/bash builder \
+    if getent passwd ubuntu >/dev/null; then userdel -r ubuntu; fi \
+    && useradd -ms /bin/bash builder \
     && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER builder
 RUN \
