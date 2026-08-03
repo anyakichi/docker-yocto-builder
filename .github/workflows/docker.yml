@@ -98,54 +98,113 @@ jobs:
   build_and_push:
     runs-on: ubuntu-latest
     needs: [build_and_push_base, build_and_push_fedora]
-    env:
-      DEFAULT_PAIRS:
-        xenial-krogoth xenial-morty xenial-pyro xenial-rocko xenial-sumo
-        bionic-thud bionic-warrior bionic-zeus bionic-dunfell
-        focal-gatesgarth focal-hardknott focal-honister focal-kirkstone
-        jammy-langdale jammy-nanbield jammy-scarthgap jammy-styhead
-        noble-styhead noble-walnascar noble-whinlatter noble-wrynose
     strategy:
       fail-fast: false
+      # The cross product of every base and every branch is mostly pairs
+      # that Yocto never supported: 5.4 does not build on xenial and 2.1
+      # does not build on resolute.  List the band instead, which is the
+      # SANITY_TESTED_DISTROS of each release mapped onto the bases we
+      # have, and it also keeps the matrix under the 256 jobs a run may
+      # have.  The pair marked default is the one that also takes the
+      # bare <branch> tag.
       matrix:
-        base:
-          - xenial
-          - bionic
-          - focal
-          - jammy
-          - noble
-          - resolute
-          - fedora
-          - almalinux8
-          - almalinux9
-        branch:
-          - krogoth
-          - morty
-          - pyro
-          - rocko
-          - sumo
-          - thud
-          - warrior
-          - zeus
-          - dunfell
-          - gatesgarth
-          - hardknott
-          - honister
-          - kirkstone
-          - langdale
-          - mickledore
-          - nanbield
-          - scarthgap
-          - styhead
-          - walnascar
-          - whinlatter
-          - wrynose
+        include:
+          - { base: xenial, branch: krogoth, default: true }
+
+          - { base: xenial, branch: morty, default: true }
+
+          - { base: xenial, branch: pyro, default: true }
+
+          - { base: xenial, branch: rocko, default: true }
+
+          - { base: xenial, branch: sumo, default: true }
+          - { base: bionic, branch: sumo }
+
+          - { base: xenial, branch: thud }
+          - { base: bionic, branch: thud, default: true }
+
+          - { base: xenial, branch: warrior }
+          - { base: bionic, branch: warrior, default: true }
+
+          - { base: xenial, branch: zeus }
+          - { base: bionic, branch: zeus, default: true }
+
+          - { base: bionic, branch: dunfell, default: true }
+          - { base: focal, branch: dunfell }
+          - { base: jammy, branch: dunfell }
+          - { base: almalinux8, branch: dunfell }
+
+          - { base: xenial, branch: gatesgarth }
+          - { base: bionic, branch: gatesgarth }
+          - { base: focal, branch: gatesgarth, default: true }
+
+          - { base: xenial, branch: hardknott }
+          - { base: bionic, branch: hardknott }
+          - { base: focal, branch: hardknott, default: true }
+
+          - { base: xenial, branch: honister }
+          - { base: bionic, branch: honister }
+          - { base: focal, branch: honister, default: true }
+
+          - { base: bionic, branch: kirkstone }
+          - { base: focal, branch: kirkstone, default: true }
+          - { base: jammy, branch: kirkstone }
+          - { base: noble, branch: kirkstone }
+          - { base: almalinux8, branch: kirkstone }
+          - { base: almalinux9, branch: kirkstone }
+
+          - { base: bionic, branch: langdale }
+          - { base: focal, branch: langdale }
+          - { base: jammy, branch: langdale, default: true }
+          - { base: almalinux8, branch: langdale }
+
+          - { base: bionic, branch: mickledore }
+          - { base: focal, branch: mickledore }
+          - { base: jammy, branch: mickledore, default: true }
+          - { base: almalinux8, branch: mickledore }
+          - { base: almalinux9, branch: mickledore }
+
+          - { base: bionic, branch: nanbield }
+          - { base: focal, branch: nanbield }
+          - { base: jammy, branch: nanbield, default: true }
+          - { base: fedora, branch: nanbield }
+          - { base: almalinux8, branch: nanbield }
+          - { base: almalinux9, branch: nanbield }
+
+          - { base: focal, branch: scarthgap }
+          - { base: jammy, branch: scarthgap, default: true }
+          - { base: noble, branch: scarthgap }
+          - { base: fedora, branch: scarthgap }
+          - { base: almalinux8, branch: scarthgap }
+          - { base: almalinux9, branch: scarthgap }
+
+          - { base: focal, branch: styhead }
+          - { base: jammy, branch: styhead }
+          - { base: noble, branch: styhead, default: true }
+          - { base: fedora, branch: styhead }
+          - { base: almalinux8, branch: styhead }
+          - { base: almalinux9, branch: styhead }
+
+          - { base: focal, branch: walnascar }
+          - { base: jammy, branch: walnascar }
+          - { base: noble, branch: walnascar, default: true }
+          - { base: fedora, branch: walnascar }
+          - { base: almalinux8, branch: walnascar }
+          - { base: almalinux9, branch: walnascar }
+
+          - { base: noble, branch: whinlatter, default: true }
+          - { base: resolute, branch: whinlatter }
+          - { base: fedora, branch: whinlatter }
+
+          - { base: noble, branch: wrynose, default: true }
+          - { base: resolute, branch: wrynose }
+          - { base: fedora, branch: wrynose }
     steps:
       - run: |
           tag="${{ matrix.base }}-${{ matrix.branch }}"
           echo "TAGS<<EOF" >> $GITHUB_ENV
           echo "$tag" >> $GITHUB_ENV
-          if [[ "$DEFAULT_PAIRS" == *"$tag"* ]]; then
+          if [[ -n "${{ matrix.default }}" ]]; then
             echo "${{ matrix.branch }}" >> $GITHUB_ENV
           fi
           echo EOF >> $GITHUB_ENV
