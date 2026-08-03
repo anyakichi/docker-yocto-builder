@@ -2,6 +2,7 @@ ARG base="fedora"
 FROM ${base}
 
 # https://docs.yoctoproject.org/ref-manual/system-requirements.html#fedora-packages
+# https://docs.yoctoproject.org/ref-manual/system-requirements.html#almalinux-packages
 RUN \
     . /etc/os-release \
     ; if [[ "$ID" == "fedora" ]]; then \
@@ -12,12 +13,9 @@ RUN \
             perl-locale \
             python; \
       else \
-        dnf install -y epel-release; \
-        if [[ "${VERSION_ID%%.*}" == 8 ]]; then \
-            dnf config-manager --set-enabled powertools; \
-        else \
-            dnf config-manager --set-enabled crb; \
-        fi; \
+        dnf install -y epel-release dnf-plugins-core; \
+        dnf config-manager --set-enabled crb \
+            || dnf config-manager --set-enabled powertools; \
         dnf makecache; \
       fi \
     ; dnf install -y \
