@@ -100,6 +100,7 @@ CMD ["/bin/bash"]
 ARG yocto_branch
 ENV \
     LANG=en_US.UTF-8 \
+    YOCTO_BB_GENERATE_MIRROR_TARBALLS="" \
     YOCTO_BITBAKE_TARGET=core-image-minimal \
     YOCTO_BRANCH=${yocto_branch} \
     YOCTO_BUILDTOOLS="" \
@@ -110,4 +111,6 @@ ENV \
     YOCTO_DISTRO="" \
     YOCTO_DL_DIR="" \
     YOCTO_MACHINE="" \
-    YOCTO_SSTATE_DIR=""
+    YOCTO_SOURCE_MIRROR_URL="" \
+    YOCTO_SSTATE_DIR="" \
+    YOCTO_SSTATE_MIRRORS=""
