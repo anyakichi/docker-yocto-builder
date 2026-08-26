@@ -49,9 +49,12 @@ builder@yocto-1:/build/yocto/build$ bitbake-config-build enable-fragment machine
 | `YOCTO_MACHINE`        | `qemux86-64`         | Machine fragment. For the releases set up from poky it is `MACHINE` in `auto.conf` instead, and unset by default. |
 | `YOCTO_BUILDTOOLS`     |                      | Install buildtools and use the host tools of it when it is set to anything.                              |
 | `YOCTO_BUILDTOOLS_OPTS` |                     | Extra options for the command that installs buildtools.                                                  |
+| `YOCTO_BB_GENERATE_MIRROR_TARBALLS` |         | `BB_GENERATE_MIRROR_TARBALLS`.                                                                           |
 | `YOCTO_CCACHE_DIR`     |                      | `CCACHE_TOP_DIR`. ccache is inherited when it is set.                                                    |
 | `YOCTO_DL_DIR`         |                      | `DL_DIR`.                                                                                                |
+| `YOCTO_SOURCE_MIRROR_URL` |                   | `SOURCE_MIRROR_URL`. own-mirrors is inherited when it is set.                                            |
 | `YOCTO_SSTATE_DIR`     |                      | `SSTATE_DIR`.                                                                                            |
+| `YOCTO_SSTATE_MIRRORS` |                      | `SSTATE_MIRRORS`.                                                                                        |
 
 `YOCTO_CONFIG`, `YOCTO_CONFIG_NAME` and `YOCTO_DISTRO` are only for the
 releases set up with bitbake-setup, and they take effect in `extract`,
