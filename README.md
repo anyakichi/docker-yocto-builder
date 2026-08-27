@@ -42,6 +42,7 @@ builder@yocto-1:/build/yocto/build$ bitbake-config-build enable-fragment machine
 | Variable               | Default              | Description                                                                                             |
 | ---------------------- | -------------------- | ------------------------------------------------------------------------------------------------------- |
 | `YOCTO_BRANCH`         | `master`             | Release branch to build. It is baked into the branch specific images.                                    |
+| `YOCTO_REV`            |                      | Exact revision of poky to check out, a commit hash or a tag. `YOCTO_BRANCH` still names the release it belongs to. |
 | `YOCTO_BITBAKE_TARGET` | `core-image-minimal` | Target of bitbake.                                                                                       |
 | `YOCTO_CONFIG`         | `poky-${YOCTO_BRANCH}` | bitbake-setup configuration template. `bitbake-setup list` shows what is available.                    |
 | `YOCTO_CONFIG_NAME`    | `poky`               | bitbake configuration in the template, e.g. `poky-with-sstate`.                                          |
@@ -61,6 +62,10 @@ releases set up with bitbake-setup, and they take effect in `extract`,
 where the configuration is chosen, as does `YOCTO_MACHINE` for those
 releases. Use `bitbake-config-build enable-fragment` to change the
 machine or the distro of a setup that is already extracted.
+
+`YOCTO_REV` is only for the releases set up from poky. A bitbake-setup
+build takes its revisions from the configuration, so pin them with a
+`YOCTO_CONFIG` of your own instead.
 
 The way the release is set up is told by the `yocto-flavor` command,
 which prints `poky` or `bitbake-setup`. `extract` and `setup` pick
