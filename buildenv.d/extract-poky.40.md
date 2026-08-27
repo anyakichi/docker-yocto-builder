@@ -2,6 +2,9 @@ Clone poky repository.
 
 ```
 $ git clone -b ${YOCTO_BRANCH:-master} https://git.yoctoproject.org/poky
+{% if "${YOCTO_REV:-}" %}
+$ git -C poky checkout ${YOCTO_REV}
+{% endif %}
 ```
 
 Install buildtools into poky/buildtools when YOCTO_BUILDTOOLS is set.
