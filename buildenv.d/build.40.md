@@ -1,8 +1,4 @@
-Setup build environment before building.
-
-```
-$ . <(buildenv setup)
-```
+{% include setup -%}
 
 Build your firmware by bitbake.
 
