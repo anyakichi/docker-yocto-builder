@@ -25,8 +25,14 @@ builder@yocto-1:/build/yocto/build$ build
 - Older releases are set up the traditional way. `extract` clones poky,
   and `setup` sources `poky/oe-init-build-env build`.
 
-Run `extract -m` or `setup -m` in the container to see what they are
-about to do for the release of the image.
+`build` takes the steps of `setup` itself when it is run in a shell that
+has no build environment yet, which is how it works right after
+`extract`, and skips them in a shell that has run `setup`. `setup` run
+again in such a shell leaves it as it is.
+
+Run `extract -m`, `setup -m` or `build -m` in the container to see what
+they are about to do for the release of the image; the three read as one
+manual.
 
 Layers and the configuration of a bitbake-setup build are managed after
 the setup by bitbake-setup itself:
