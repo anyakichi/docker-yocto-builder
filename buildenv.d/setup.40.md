@@ -1,5 +1,3 @@
-{% if -z "${BBPATH:-}" -%}
-
+{% if -z "${BBPATH:-}" %}
 {% include setup-$(yocto-flavor) %}
-
-{% endif -%}
+{% endif %}

@@ -1,4 +1,4 @@
-{% include setup -%}
+{% include setup %}
 
 Build your firmware by bitbake.
 
